@@ -1,11 +1,4 @@
 #!/bin/bash
-: '
-Variables:
-Encrypted: Encrypted text
-Key: Key text
-Key_location: location of key character array (in loop)
-Decrypted: Decrypted text
-'
 decrypted=""
 read -e -r -p "Encrypted text [In base 2]: " encrypted
 read -e -r -p "Key text [In base 2]: " key
