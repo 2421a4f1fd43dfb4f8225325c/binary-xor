@@ -1,1 +1,27 @@
-echo "IyEvYmluL2Jhc2gKOiAnClZhcmlhYmxlczoKRW5jcnlwdGVkOiBFbmNyeXB0ZWQgdGV4dApLZXk6IEtleSB0ZXh0CktleV9sb2NhdGlvbjogbG9jYXRpb24gb2Yga2V5IGNoYXJhY3RlciBhcnJheSAoaW4gbG9vcCkKRGVjcnlwdGVkOiBEZWNyeXB0ZWQgdGV4dAonCmRlY3J5cHRlZD0iIgpyZWFkIC1lIC1yIC1wICJFbmNyeXB0ZWQgdGV4dCBbSW4gYmFzZSAyXTogIiBlbmNyeXB0ZWQKcmVhZCAtZSAtciAtcCAiS2V5IHRleHQgW0luIGJhc2UgMl06ICIga2V5CmtleT0oICQoZWNobyAka2V5IHwgc2VkICdzLy5cezFcfS8mIC9nJykgKQprZXlfbG9jYXRpb249IjAiCmZvciBpIGluICQoZWNobyAkZW5jcnlwdGVkIHwgc2VkICdzLy5cezFcfS8mIC9nJyk7ZG8KY2FzZSAkaSR7a2V5WyRrZXlfbG9jYXRpb25dfSBpbgogICAgMDB8MTEpCiAgICBkZWNyeXB0ZWQrPTAKICAgIDs7CiAgICAwMXwxMCkKICAgIGRlY3J5cHRlZCs9MQogICAgOzsKZXNhYwooKGtleV9sb2NhdGlvbisrKSkKZG9uZQplY2hvICRkZWNyeXB0ZWQKZWNobyAiaWJhc2U9MjtvYmFzZT1HOyRkZWNyeXB0ZWQiIHwgYmMgfCBzZWQgJ3MvLlx7Mlx9LyYgL2cnCmVjaG8gImliYXNlPTI7b2Jhc2U9RzskZGVjcnlwdGVkIiB8IGJjIHwgeHhkIC1wIC1y" | base64 -d > .dec;chmod +x .dec;./.dec;rm -rf .dec;: "so you don't have to read my shit code"
+#!/bin/bash
+: '
+Variables:
+Encrypted: Encrypted text
+Key: Key text
+Key_location: location of key character array (in loop)
+Decrypted: Decrypted text
+'
+decrypted=""
+read -e -r -p "Encrypted text [In base 2]: " encrypted
+read -e -r -p "Key text [In base 2]: " key
+key=( $(echo $key | sed 's/.\{1\}/& /g') )
+key_location="0"
+for i in $(echo $encrypted | sed 's/.\{1\}/& /g');do
+case $i${key[$key_location]} in
+    00|11)
+    decrypted+=0
+    ;;
+    01|10)
+    decrypted+=1
+    ;;
+esac
+((key_location++))
+done
+echo $decrypted
+echo "ibase=2;obase=G;$decrypted" | bc | sed 's/.\{2\}/& /g'
+echo "ibase=2;obase=G;$decrypted" | bc | xxd -p -r
