@@ -23,7 +23,7 @@ echo -n "Ciphertext: "
 echo "$enc" | sed 's/.\{8\}/& /g'
 echo -n "Key: "
 echo "$key_svd" | sed 's/.\{8\}/& /g'
-echo "ibase=2;obase=G;$enc" | bc
+echo "ibase=2;obase=G;$enc" | bc | sed 's/.\{2\}/& /g'
 echo "ibase=2;obase=G;$enc" | bc | xxd -p -r
 echo "ibase=2;obase=G;$enc" | bc | xxd -p -r > encrypted
 echo
