@@ -26,7 +26,7 @@ echo "$key_svd" | sed 's/.\{8\}/& /g'
 for i in $(echo "ibase=2;obase=G;$enc" | bc | sed 's/.\{2\}/& /g');do
 i="${i//\\/}"
 echo -n "$i "
-done
+done;echo
 echo "ibase=2;obase=G;$enc" | bc | xxd -p -r
 echo "ibase=2;obase=G;$enc" | bc | xxd -p -r > encrypted
 echo
