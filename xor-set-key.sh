@@ -3,6 +3,7 @@ enc=""
 data=""
 read -e -r -p "text: " data
 read -e -r -p "key: " key
+key_length="$(echo $key | wc -c)"
 data="$(echo $data | perl -lpe '$_=unpack"B*"')"
 key="$(echo $key | perl -lpe '$_=unpack"B*"')"
 key=( $(echo $key | sed 's/.\{1\}/& /g') )
@@ -22,8 +23,11 @@ case $i${key[$key_location]} in
     ;;
 esac
 ((key_location++))
+if [ "$key_location" -gt "$key_length" ];then
+key_location=0
+fi
 done
-#clear
+clear
 echo -n "Ciphertext: "
 echo "$enc" | sed 's/.\{8\}/& /g'
 echo -n "Key: "
