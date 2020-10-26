@@ -25,6 +25,7 @@ echo -n "Key: "
 echo "$key_svd" | sed 's/.\{8\}/& /g'
 for i in $(echo "ibase=2;obase=G;$enc" | bc | sed 's/.\{2\}/& /g');do
 i="${i//\\/}"
+i="${i// /}"
 echo -n "$i "
 done;echo
 echo "ibase=2;obase=G;$enc" | bc | xxd -p -r > encrypted
@@ -33,6 +34,7 @@ echo -n "#"
 done
 for i in $(echo "ibase=2;obase=G;$key_svd" | bc | sed 's/.\{2\}/& /g');do
 i="${i//\\/}"
+i="${i// /}"
 echo -n "${i} "
 done;echo
 echo "ibase=2;obase=G;$key_svd" | bc | xxd -p -r > key
