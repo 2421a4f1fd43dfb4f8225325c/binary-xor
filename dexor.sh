@@ -15,12 +15,14 @@ case $i${key[$key_location]} in
 esac
 ((key_location++))
 done
-echo $decrypted
+echo $decrypted | sed 's/.\{8\}/& /g'
+: > dec_hex
 for i in $(echo "ibase=2;obase=G;$decrypted" | bc | sed 's/.\{2\}/& /g');do
 i="${i//\\/}"
 for x in $i;do
 echo -n "$x "
+echo -n "$x " >> dec_hex
 done
-done
+done;echo
 echo "ibase=2;obase=G;$decrypted" | bc | xxd -p -r
 
