@@ -18,7 +18,9 @@ done
 echo $decrypted
 for i in $(echo "ibase=2;obase=G;$decrypted" | bc | sed 's/.\{2\}/& /g');do
 i="${i//\\/}"
-echo -n "$i "
+for x in $i;do
+echo -n "$x "
+done
 done
 echo "ibase=2;obase=G;$decrypted" | bc | xxd -p -r
 
