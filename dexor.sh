@@ -16,5 +16,9 @@ esac
 ((key_location++))
 done
 echo $decrypted
-echo "ibase=2;obase=G;$decrypted" | bc | sed 's/.\{2\}/& /g'
+for i in $(echo "ibase=2;obase=G;$decrypted" | bc | sed 's/.\{2\}/& /g');do
+i="${i//\\/}"
+echo -n "$i "
+done
 echo "ibase=2;obase=G;$decrypted" | bc | xxd -p -r
+
