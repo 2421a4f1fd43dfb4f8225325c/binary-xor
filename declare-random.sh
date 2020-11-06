@@ -1,7 +1,7 @@
 #!/bin/bash
 read -e -r -p "Start RNG: " rng
 if ! [ "$rng" -eq "$rng" ] 2>/dev/null;then
-echo "\033[38;05;9mInteger expected but found $rng"
+echo -e "\033[38;05;9mInteger expected but found $rng"
 return 1
 exit
 fi
