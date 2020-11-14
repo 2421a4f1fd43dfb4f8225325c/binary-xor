@@ -1,4 +1,8 @@
 #!/bin/bash
+getrandom(){
+x="$(cat /dev/urandom | xxd -u -l 1 -p)"
+echo "ibase=G;obase=2;$x" | bc
+}
 enc=""
 data=""
 key_svd=""
@@ -7,8 +11,8 @@ data="$(echo $data | perl -lpe '$_=unpack"B*"')"
 data="$(echo $data | sed 's/.\{1\}/& /g')"
 echo $data
 for i in $data;do
-key="$((RANDOM%2))"
-key_svd="$key_svd$key"
+key="$(getrandom)"
+keyTotal="$keyTotal$key"
 case $i$key in
     00|11)
     enc+=0
