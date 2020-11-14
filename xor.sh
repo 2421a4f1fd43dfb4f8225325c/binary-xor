@@ -3,9 +3,10 @@ getrandom(){
 x="$(cat /dev/urandom | xxd -u -l 1 -p)"
 echo "ibase=G;obase=2;$x" | bc | head -c 1
 }
+getrandom
 enc=""
 data=""
-key_svd=""
+keyTotal=""
 read -e -r -p "text: " data
 data="$(echo $data | perl -lpe '$_=unpack"B*"')"
 data="$(echo $data | sed 's/.\{1\}/& /g')"
