@@ -1,7 +1,7 @@
 #!/bin/bash
 getrandom(){
 x="$(cat /dev/urandom | xxd -u -l 1 -p)"
-echo "ibase=G;obase=2;$x" | bc
+echo "ibase=G;obase=2;$x" | bc | head -c 1
 }
 enc=""
 data=""
@@ -45,4 +45,4 @@ for x in $i;do
 echo -n "${x} "
 done
 done;echo
-echo "ibase=2;obase=G;$key_svd" | bc | xxd -p -r > key
+echo "ibase=2;obase=G;$keyTotal" | bc | xxd -p -r > key
