@@ -1,7 +1,7 @@
 #!/bin/bash
 getrandom(){
 urandom="$(cat /dev/urandom | xxd -u -l 1 -p)"
-echo "ibase=G;obase=2;$urandom" | bc | head -c 1
+echo "ibase=G;obase=2;$urandom" | bc | cut -c 6-6
 }
 getrandom
 enc=""
