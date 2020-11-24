@@ -1,4 +1,8 @@
 #!/bin/bash
+rng(){
+x="$(cat /dev/urandom | xxd -u -l 1 -p)"
+echo "ibase=G;obase=A;$x" | bc
+}
 enc=""
 data=""
 key_svd=""
@@ -7,7 +11,8 @@ data="$(echo $data | perl -lpe '$_=unpack"B*"')"
 data="$(echo $data | sed 's/.\{1\}/& /g')"
 echo $data
 for i in $data;do
-key="$((RANDOM%2))"
+key="$(rng)"
+((key%=2))
 key_svd="$key_svd$key"
 case $i$key in
     00|11)
