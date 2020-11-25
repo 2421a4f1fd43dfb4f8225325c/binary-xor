@@ -1,4 +1,5 @@
 #!/bin/bash
+#you can also use this as XOR with a set key; the output will just look a little weird, you can just ignore that.
 decrypted=""
 read -e -r -p "Encrypted text [In base 2]: " encrypted
 read -e -r -p "Key text [In base 2]: " key
@@ -25,4 +26,4 @@ echo -n "$x " >> dec_hex
 done
 done;echo
 echo "ibase=2;obase=G;$decrypted" | bc | xxd -p -r
-
+echo "ibase=2;obase=G;$decrypted" | bc | xxd -p -r > decrypted
