@@ -1,6 +1,6 @@
 #!/bin/bash
 rng(){
-x="$(cat /dev/random | xxd -u -l 1 -p)"
+x="$(cat /dev/urandom | xxd -u -l 1 -p)"
 echo "ibase=G;obase=A;$x" | bc
 }
 enc=""
