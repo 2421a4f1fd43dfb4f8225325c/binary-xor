@@ -18,6 +18,4 @@ esac
 done
 echo $decrypted | sed 's/.\{8\}/& /g'
 : > dec_hex
-echo "ibase=2;obase=G;$decrypted" | bc | sed 's/.\{2\}/& /g' | sed 's/\\//g' > dec_hex
 echo "ibase=2;obase=G;$decrypted" | bc | xxd -p -r
-echo "ibase=2;obase=G;$decrypted" | bc | xxd -p -r > decrypted
