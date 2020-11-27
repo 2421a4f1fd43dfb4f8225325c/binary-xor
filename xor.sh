@@ -3,10 +3,7 @@ rng(){
     x="$(cat /dev/urandom | xxd -u -l 1 -p)"
     echo "ibase=G;obase=A;$x" | bc
 }
-enc=""
-data=""
-key_svd=""
-echo "Press CTRL+D when you are done typing"
+enc="";data="";key_svd=""
 data="$(cat /dev/stdin)";echo
 data="$(echo $data | perl -lpe '$_=unpack"B*"')"
 data="$(echo $data | sed 's/.\{1\}/& /g')"
