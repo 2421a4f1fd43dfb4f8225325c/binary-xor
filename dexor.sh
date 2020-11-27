@@ -17,5 +17,4 @@ esac
 ((key_location++))
 done
 echo $decrypted | sed 's/.\{8\}/& /g'
-: > dec_hex
 echo "ibase=2;obase=G;$decrypted" | bc | xxd -p -r
