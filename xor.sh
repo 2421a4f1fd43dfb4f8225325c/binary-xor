@@ -1,7 +1,6 @@
 #!/bin/bash
 rng(){
-    x="$(cat /dev/urandom | xxd -u -l 1 -p)"
-    echo "ibase=G;obase=A;$x" | bc
+    cat /dev/urandom | hexdump -v -e '/1 "%u"' -n 1
 }
 enc="";data="";key_svd=""
 data="$(cat /dev/stdin)";echo
