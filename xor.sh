@@ -8,17 +8,9 @@ data="$(echo $data | perl -lpe '$_=unpack"B*"')"
 data="$(echo $data | sed 's/.\{1\}/& /g')"
 echo $data
 for i in $data;do
-    key="$(rng)"
-    ((key%=2))
-    key_svd+=$key
-    case $i$key in
-        00|11)
-        enc+=0
-        ;;
-        01|10)
-        enc+=1
-        ;;
-    esac
+key="$(rng)"
+enc+=$(((i+(key%=2))%2))
+key_svd+=$key
 done
 clear
 echo "Ciphertext: `echo "$enc" | sed 's/.\{8\}/& /g'`"
