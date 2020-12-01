@@ -3,18 +3,11 @@
 decrypted=""
 read -e -r -p "Encrypted text [binary]: " encrypted
 read -e -r -p "Key text [binary]: " key
-key=( $(echo $key | sed 's/.\{1\}/& /g') )
+key=( $(echo $key|sed 's/.\{1\}/& /g') )
 key_location="0"
-for i in $(echo $encrypted | sed 's/.\{1\}/& /g');do
-case $i${key[$key_location]} in
-    00|11)
-    decrypted+=0
-    ;;
-    01|10)
-    decrypted+=1
-    ;;
-esac
+for i in $(echo $encrypted|sed 's/.\{1\}/& /g');do
+decrypted+=$(( ($i+${key[$key_location]}) % 2))
 ((key_location++))
 done
-echo $decrypted | sed 's/.\{8\}/& /g'
-echo "ibase=2;obase=G;$decrypted" | bc | xxd -p -r
+echo $decrypted|sed 's/.\{8\}/& /g'
+echo "ibase=2;obase=G;$decrypted"|bc|xxd -p -r
