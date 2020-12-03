@@ -7,9 +7,9 @@ data="$(cat /dev/stdin)";echo
 data="$(echo $data|perl -lpe '$_=unpack"B*"'|sed 's/.\{1\}/& /g')"
 echo $data
 for i in $data;do
-key="$(rng)"
-enc+=$(((i+(key%=2))%2))
-key_svd+=$key
+	key="$(rng)"
+	enc+=$(((i+(key%=2))%2))
+	key_svd+=$key
 done
 clear
 echo "Ciphertext: `echo "$enc"|sed 's/.\{8\}/& /g'`"
