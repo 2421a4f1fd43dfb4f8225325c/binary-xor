@@ -1,7 +1,7 @@
 #!/bin/bash
 enc="";data="";key_svd=""
 data="$(cat|perl -lpe '$_=unpack"B*"'|sed 's/.\{1\}/& /g')"
-printf "\n$data\n"
+echo "$data"|tr -d '\n';echo
 for i in $data;do
 	key=$(cat /dev/urandom|hexdump -v -e '/1 "%u"' -n 1)
 	enc+=$(((i+(key%=2))%2))
