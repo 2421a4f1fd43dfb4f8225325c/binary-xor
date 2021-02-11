@@ -1,6 +1,6 @@
 #!/bin/bash
 enc="";data="";key_svd=""
-data="$(cat|perl -lpe '$_=unpack"B*"'|sed 's/.\{1\}/& /g')"
+data="$(cat|base64 -w 0|perl -lpe '$_=unpack"B*"'|sed 's/.\{1\}/& /g')"
 echo "$data"|tr -d '\n';echo
 for i in $data;do
         key=$(od -An -N1 -i /dev/urandom|tr -d ' ')
