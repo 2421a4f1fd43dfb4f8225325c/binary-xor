@@ -1,18 +1,23 @@
 #!/bin/bash
-enc="";data="";key_svd=""
-data="$(cat|base64 -w 0|perl -lpe '$_=unpack"B*"'|sed 's/.\{1\}/& /g')"
-echo "$data"|tr -d '\n';echo
-for i in $data;do
-        key=$(od -An -N1 -i /dev/urandom|tr -d ' ')
-        enc+=$((i^(key%=2)))
-        key_svd+=$key
+data="$(cat|xxd -u -p|sed 's/.\{2\}/& /g'|tr -d '\n')"
+for dataloop in $data;do
+        dataloop=$(bc <<<"ibase=G;obase=A;$dataloop")
+        #converted to base 10 [0-255]
+        key=$(cat /dev/urandom|hexdump -v -e '/1 "%u"' -n 1)
+        ((key%=256))
+        #key=random [0-255]
+        xord=$((key^dataloop))
+        #xor'd
+        xord=$(bc <<<"ibase=A;obase=G;$xord")
+        [ "$(echo -n $xord|wc -c)" -lt "2" ]&&xord="0$xord"
+        total_encrypted+="$xord"
+        key=$(bc <<<"ibase=A;obase=G;$key")
+        [ "$(echo -n $key|wc -c)" -lt "2" ]&&key="0$key"
+        total_key+="$key"
 done
-clear
-echo "Ciphertext: `echo "$enc"|sed 's/.\{8\}/& /g'`"
-echo "Key: `echo "$key_svd"|sed 's/.\{8\}/& /g'`"
-for i in $(seq $(tput cols));do echo -n "#";done;echo
-echo "ibase=2;obase=G;$enc"|bc|xxd -p -r > encrypted
-cat encrypted|xxd -u -l 10000000000 -p|sed 's/.\{2\}/& /g'|tr -d '\n';echo
-for i in $(seq $(tput cols));do echo -n "#";done
-echo "ibase=2;obase=G;$key_svd"|bc|xxd -p -r > key
-cat key|xxd -u -l 10000000000000000 -p|sed 's/.\{2\}/& /g'|tr -d '\n';echo
+echo "$total_encrypted"|sed 's/.\{2\}/& /g'
+echo
+echo "$total_key"|sed 's/.\{2\}/& /g'
+
+echo "$total_encrypted"|xxd -p -r > encrypted
+echo "$total_key"|xxd -p -r > key
