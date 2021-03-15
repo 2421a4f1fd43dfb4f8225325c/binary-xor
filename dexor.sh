@@ -1,13 +1,19 @@
 #!/bin/bash
-#you can also use this as XOR with a set key
-decrypted=""
-read -e -r -p "Encrypted text [binary]: " encrypted
-read -e -r -p "Key text [binary]: " key
-key=( $(echo $key|sed 's/.\{1\}/& /g') )
-key_location="0"
-for i in $(echo $encrypted|sed 's/.\{1\}/& /g');do
-decrypted+=$(( ($i+${key[$key_location]}) % 2))
-((key_location++))
+encrypted="$(cat $1|xxd -u -p|sed 's/.\{2\}/& /g')"
+key="$(cat $2|xxd -u -p|sed 's/.\{2\}/& /g')"
+key=( $key )
+keyloopover="0"
+#keyloopover defines the place in the array
+for dataloop in $encrypted;do
+        dataloop=$(bc <<<"ibase=G;obase=A;$dataloop")
+        key_loop=${key[$keyloopover]}
+        ((keyloopover++))
+        key_loop=$(bc <<<"ibase=G;obase=A;$key_loop")
+        #both are converted to decimal
+        xord=$((dataloop^key_loop))
+        xord=$(bc <<<"ibase=A;obase=G;$xord")
+        [ "$(echo -n $xord|wc -c)" -lt "2" ]&&xord="0$xord"
+        decrypted+="$xord"
 done
-echo $decrypted|sed 's/.\{8\}/& /g'
-echo "ibase=2;obase=G;$decrypted"|bc|xxd -p -r
+echo "$decrypted"|sed 's/.\{2\}/& /g'
+echo "$decrypted"|xxd -p -r > decrypted
